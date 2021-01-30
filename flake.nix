@@ -9,14 +9,14 @@
     lib = {
       hm = import ./modules/lib { lib = nixpkgs.lib; };
       homeManagerConfiguration = { configuration, system, homeDirectory
-        , username, extraSpecialArgs ? { }
+        , username, extraModules ? [ ], extraSpecialArgs ? { }
         , pkgs ? builtins.getAttr system nixpkgs.outputs.legacyPackages
         , check ? true }@args:
         import ./modules {
           inherit pkgs check;
 
           configuration = { ... }: {
-            imports = [ configuration ];
+            imports = [ configuration ] ++ extraModules;
             home = { inherit homeDirectory username; };
           };
 
