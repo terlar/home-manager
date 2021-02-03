@@ -13,14 +13,15 @@
         , pkgs ? builtins.getAttr system nixpkgs.outputs.legacyPackages
         , check ? true }@args:
         import ./modules {
-          inherit pkgs check;
+          inherit pkgs check extraSpecialArgs;
 
           configuration = { ... }: {
             imports = [ configuration ] ++ extraModules;
-            home = { inherit homeDirectory username; };
+            home = {
+              inherit homeDirectory username;
+              stateVersion = "20.09";
+            };
           };
-
-          extraSpecialArgs = extraSpecialArgs // { inherit pkgs; };
         };
     };
   };
